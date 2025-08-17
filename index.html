@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的应用</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+    }
+    #wrapper {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-overflow-scrolling: touch;
+      overflow: auto;
+    }
+    #myframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      transform-origin: 0 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="wrapper">
+    <!-- 修改位置在这里 👇 -->
+    <iframe 
+      id="myframe" 
+      src="https://yinwu.lyzxwh.cn/html/intostack/new_login.html"
+      sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox"
+    ></iframe>
+  </div>
+  <script>
+    const TARGET_URL = "https://你的原网站网址";
+    
+    function adjustScale() {
+      const frame = document.getElementById('myframe');
+      const width = window.innerWidth;
+      const scale = Math.min(width / 1200, 1);
+      
+      frame.style.transform = `scale(${scale})`;
+      frame.style.width = `${1200}px`;
+      frame.style.height = `${window.innerHeight / scale}px`;
+    }
+    
+    document.getElementById('myframe').src = TARGET_URL;
+    window.addEventListener('resize', adjustScale);
+    window.addEventListener('load', adjustScale);
+  </script>
+</body>
+</html>

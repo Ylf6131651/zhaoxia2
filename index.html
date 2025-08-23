@@ -9,6 +9,8 @@
       padding: 0;
       overflow: hidden;
       height: 100%;
+      background-color: #f0f0f0; 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; 
     }
     #wrapper {
       position: absolute;
@@ -16,39 +18,76 @@
       height: 100%;
       -webkit-overflow-scrolling: touch;
       overflow: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     #myframe {
       width: 100%;
       height: 100%;
       border: none;
       transform-origin: 0 0;
+      background-color: white; 
+      box-shadow: 0 0 20px rgba(0,0,0,0.1); 
+    }
+    #loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 18px;
+      color: #666;
     }
   </style>
 </head>
 <body>
   <div id="wrapper">
+    <div id="loading">加载中，请稍候...</div>
     <iframe 
       id="myframe" 
-      src="https://cdn.jsdelivr.net/gh/ylf6131651/zhaoxia2@main/index.html?target=https://yinwu.lyzxwh.cn/html/intostack/new_login.html"
-      sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox"
+      src="https://yinwu.lyzxwh.cn/html/intostack/new_login.html"
+      sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals"
+      onload="document.getElementById('loading').style.display = 'none';"
     ></iframe>
   </div>
   <script>
-    const TARGET_URL = "https://cdn.jsdelivr.net/gh/ylf6131651/zhaoxia2@main/index.html?target=https://yinwu.lyzxwh.cn/html/intostack/new_login.html";
+    const TARGET_URL = "https://yinwu.lyzxwh.cn/html/intostack/new_login.html";
     
     function adjustScale() {
       const frame = document.getElementById('myframe');
       const width = window.innerWidth;
-      const scale = Math.min(width / 1200, 1);
+      
+     
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      const baseWidth = isMobile ? 375 : 1200; 
+      const scale = Math.min(width / baseWidth, 1);
       
       frame.style.transform = `scale(${scale})`;
-      frame.style.width = `${1200}px`;
+      frame.style.width = `${baseWidth}px`;
       frame.style.height = `${window.innerHeight / scale}px`;
     }
     
-    document.getElementById('myframe').src = TARGET_URL;
+    
+    window.addEventListener('DOMContentLoaded', () => {
+      const frame = document.getElementById('myframe');
+      frame.style.display = 'none'; 
+      frame.src = TARGET_URL;
+    });
+    
+   
+    window.addEventListener('load', () => {
+      adjustScale();
+      document.getElementById('myframe').style.display = 'block';
+    });
+    
+    
     window.addEventListener('resize', adjustScale);
-    window.addEventListener('load', adjustScale);
+    
+   
+    document.getElementById('myframe').addEventListener('error', (e) => {
+      console.error('框架加载错误:', e);
+      document.getElementById('loading').innerHTML = '加载失败，请检查网络连接或稍后重试';
+    });
   </script>
 </body>
 </html>
